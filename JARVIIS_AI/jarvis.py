@@ -21,7 +21,7 @@ engine.setProperty('volume', 1)
 def voice_change(v):
     x = int(v)
     engine.setProperty('voice', voices[x].id)
-    speak("done sir")
+    speak("done mam")
 
 
 #speak function
@@ -52,26 +52,26 @@ def checktime(tt):
     hour = datetime.datetime.now().hour
     if ("morning" in tt):
         if (hour >= 6 and hour < 12):
-            speak("Good morning sir")
+            speak("Good morning mam")
         else:
             if (hour >= 12 and hour < 18):
-                speak("it's Good afternoon sir")
+                speak("it's Good afternoon mam")
             elif (hour >= 18 and hour < 24):
-                speak("it's Good Evening sir")
+                speak("it's Good Evening mam")
             else:
-                speak("it's Goodnight sir")
+                speak("it's Goodnight mam")
     elif ("afternoon" in tt):
         if (hour >= 12 and hour < 18):
-            speak("it's Good afternoon sir")
+            speak("it's Good afternoon mam")
         else:
             if (hour >= 6 and hour < 12):
-                speak("Good morning sir")
+                speak("Good morning mam")
             elif (hour >= 18 and hour < 24):
-                speak("it's Good Evening sir")
+                speak("it's Good Evening mam")
             else:
-                speak("it's Goodnight sir")
+                speak("it's Goodnight mam")
     else:
-        speak("it's night sir!")
+        speak("it's night mam!")
 
 
 #welcome function
@@ -79,13 +79,13 @@ def wishme():
     speak("Welcome Back")
     hour = datetime.datetime.now().hour
     if (hour >= 6 and hour < 12):
-        speak("Good Morning sir!")
+        speak("Good Morning mam!")
     elif (hour >= 12 and hour < 18):
-        speak("Good afternoon sir")
+        speak("Good afternoon mam")
     elif (hour >= 18 and hour < 24):
-        speak("Good Evening sir")
+        speak("Good Evening mam")
     else:
-        speak("Goodnight sir")
+        speak("Goodnight mam")
 
     speak("Jarvis at your service, Please tell me how can i help you?")
 
@@ -108,7 +108,7 @@ def wishme_end():
 def takeCommand():
     r = sr.Recognizer()
     with sr.Microphone() as source:
-        print("Listing...")
+        print("Listening...")
         r.pause_threshold = 0.5
         audio = r.listen(source)
 
@@ -124,7 +124,6 @@ def takeCommand():
         return "None"
 
     return query
-
 
 #sending email function
 def sendEmail(to, content):
@@ -178,7 +177,7 @@ def weather():
         current_humidiy = y["humidity"]
         z = x["weather"]
         weather_description = z[0]["description"]
-        r = ("in " + city_name + " Temperature is " +
+        r = ("in " + city_name + " Temperature is " + 
              str(int(current_temperature - 273.15)) + " degree celsius " +
              ", atmospheric pressure " + str(current_pressure) + " hpa unit" +
              ", humidity is " + str(current_humidiy) + " percent"
@@ -187,6 +186,54 @@ def weather():
         speak(r)
     else:
         speak(" City Not Found ")
+
+def social_media(command):
+    if 'facebook' in command:
+        speak("Opening your Facebook")
+        wb.open("https://www.facebook.com/")
+    elif 'whatsapp' in command:
+        speak("Opening your WhatsApp")
+        wb.open("https://web.whatsapp.com/")
+    elif 'discord' in command:
+        speak("Opening your Discord server")
+        wb.open("https://discord.com/")
+    elif 'instagram' in command:
+        speak("Opening your Instagram")
+        wb.open("https://www.instagram.com/")
+    else:
+        speak("No result found")
+
+def cal_day():
+    day = datetime.datetime.today().weekday() + 1
+    day_dict={
+        1:"Monday",
+        2:"Tuesday",
+        3:"Wednesday",
+        4:"Thursday",
+        5:"Friday",
+        6:"Saturday",
+        7:"Sunday"
+    }
+    if day in day_dict.keys():
+        day_of_week = day_dict[day]
+        print(day_of_week)
+    return day_of_week
+
+
+def schedule():
+    day = cal_day().lower()
+    speak("Boss today's schedule is ")
+    week={
+    "monday": "Boss, from 9:00 to 9:50 you have Algorithms class, from 10:00 to 11:50 you have System Design class, from 12:00 to 2:00 you have a break, and today you have Programming Lab from 2:00 onwards.",
+    "tuesday": "Boss, from 9:00 to 9:50 you have Web Development class, from 10:00 to 10:50 you have a break, from 11:00 to 12:50 you have Database Systems class, from 1:00 to 2:00 you have a break, and today you have Open Source Projects lab from 2:00 onwards.",
+    "wednesday": "Boss, today you have a full day of classes. From 9:00 to 10:50 you have Machine Learning class, from 11:00 to 11:50 you have Operating Systems class, from 12:00 to 12:50 you have Ethics in Technology class, from 1:00 to 2:00 you have a break, and today you have Software Engineering workshop from 2:00 onwards.",
+    "thursday": "Boss, today you have a full day of classes. From 9:00 to 10:50 you have Computer Networks class, from 11:00 to 12:50 you have Cloud Computing class, from 1:00 to 2:00 you have a break, and today you have Cybersecurity lab from 2:00 onwards.",
+    "friday": "Boss, today you have a full day of classes. From 9:00 to 9:50 you have Artificial Intelligence class, from 10:00 to 10:50 you have Advanced Programming class, from 11:00 to 12:50 you have UI/UX Design class, from 1:00 to 2:00 you have a break, and today you have Capstone Project work from 2:00 onwards.",
+    "saturday": "Boss, today you have a more relaxed day. From 9:00 to 11:50 you have team meetings for your Capstone Project, from 12:00 to 12:50 you have Innovation and Entrepreneurship class, from 1:00 to 2:00 you have a break, and today you have extra time to work on personal development and coding practice from 2:00 onwards.",
+    "sunday": "Boss, today is a holiday, but keep an eye on upcoming deadlines and use this time to catch up on any reading or project work."
+    }
+    if day in week.keys():
+        speak(week[day])
 
 
 def personal():
@@ -263,6 +310,11 @@ if __name__ == "__main__":
             search = takeCommand().lower()
             wb.get(chromepath).open_new_tab(search + '.com')
 
+#schedule
+
+        elif ("university time table" in query or "schedule" in query):
+            schedule()
+
 #sysytem logout/ shut down etc
 
         elif ("logout" in query):
@@ -304,8 +356,7 @@ if __name__ == "__main__":
             speak("Done!")
 
 #cpu and battery usage
-        elif ("cpu and battery" in query or "battery" in query
-              or "cpu" in query):
+        elif ("cpu and battery" in query or "battery" in query or "cpu" in query):
             cpu()
 
 #jokes
@@ -316,9 +367,13 @@ if __name__ == "__main__":
         elif ("weather" in query or "temperature" in query):
             weather()
 
+#social media
+        elif ("facebook" in query or "whatsapp" in query or "discord" in query or "instagram" in query):
+            social_media(query)
+
+
 #jarvis features
-        elif ("tell me your powers" in query or "help" in query
-              or "features" in query):
+        elif ("tell me your powers" in query or "help" in query or "features" in query):
             features = ''' i can help to do lot many things like..
             i can tell you the current time and date,
             i can tell you the current weather,
