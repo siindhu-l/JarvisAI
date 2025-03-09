@@ -1,19 +1,19 @@
-import pyttsx3  #pip install pyttsx3
-import datetime  #module
+import pyttsx3  
+import datetime  
 import speech_recognition as sr
 import wikipedia
 import smtplib
 import webbrowser as wb
-import os  #inbuilt
+import os  
 import pyautogui
-import psutil  #pip install psutil
-import pyjokes  # pip install pyjokes
-import requests, json  #inbuilt
+import psutil  
+import pyjokes 
+import requests, json  
 
 engine = pyttsx3.init()
 engine.setProperty('rate', 190)
 voices = engine.getProperty('voices')
-engine.setProperty('voice', voices[1].id)
+engine.setProperty('voice', voices[0].id)
 engine.setProperty('volume', 1)
 
 
@@ -135,14 +135,6 @@ def sendEmail(to, content):
     server.close()
 
 
-#screenshot function
-def screenshot():
-    img = pyautogui.screenshot()
-    img.save(
-        "C:\\Users\\Jarvis-AI-using-python3-\\screenshots\\ss.png"
-    )
-
-
 #battery and cpu usage
 def cpu():
     usage = str(psutil.cpu_percent())
@@ -161,32 +153,6 @@ def jokes():
     speak(j)
 
 
-#weather condition
-def weather():
-    api_key = "YOUR-API_KEY" #generate your own api key from open weather
-    base_url = "http://api.openweathermap.org/data/2.5/weather?"
-    speak("tell me which city")
-    city_name = takeCommand()
-    complete_url = base_url + "appid=" + api_key + "&q=" + city_name
-    response = requests.get(complete_url)
-    x = response.json()
-    if x["cod"] != "404":
-        y = x["main"]
-        current_temperature = y["temp"]
-        current_pressure = y["pressure"]
-        current_humidiy = y["humidity"]
-        z = x["weather"]
-        weather_description = z[0]["description"]
-        r = ("in " + city_name + " Temperature is " + 
-             str(int(current_temperature - 273.15)) + " degree celsius " +
-             ", atmospheric pressure " + str(current_pressure) + " hpa unit" +
-             ", humidity is " + str(current_humidiy) + " percent"
-             " and " + str(weather_description))
-        print(r)
-        speak(r)
-    else:
-        speak(" City Not Found ")
-
 def social_media(command):
     if 'facebook' in command:
         speak("Opening your Facebook")
@@ -200,6 +166,9 @@ def social_media(command):
     elif 'instagram' in command:
         speak("Opening your Instagram")
         wb.open("https://www.instagram.com/")
+    elif 'youtube' in command:
+        speak("Opening your youtube")
+        wb.open("https://www.youtube.com/")
     else:
         speak("No result found")
 
@@ -222,23 +191,52 @@ def cal_day():
 
 def schedule():
     day = cal_day().lower()
-    speak("Boss today's schedule is ")
-    week={
-    "monday": "Boss, from 9:00 to 9:50 you have Algorithms class, from 10:00 to 11:50 you have System Design class, from 12:00 to 2:00 you have a break, and today you have Programming Lab from 2:00 onwards.",
-    "tuesday": "Boss, from 9:00 to 9:50 you have Web Development class, from 10:00 to 10:50 you have a break, from 11:00 to 12:50 you have Database Systems class, from 1:00 to 2:00 you have a break, and today you have Open Source Projects lab from 2:00 onwards.",
-    "wednesday": "Boss, today you have a full day of classes. From 9:00 to 10:50 you have Machine Learning class, from 11:00 to 11:50 you have Operating Systems class, from 12:00 to 12:50 you have Ethics in Technology class, from 1:00 to 2:00 you have a break, and today you have Software Engineering workshop from 2:00 onwards.",
-    "thursday": "Boss, today you have a full day of classes. From 9:00 to 10:50 you have Computer Networks class, from 11:00 to 12:50 you have Cloud Computing class, from 1:00 to 2:00 you have a break, and today you have Cybersecurity lab from 2:00 onwards.",
-    "friday": "Boss, today you have a full day of classes. From 9:00 to 9:50 you have Artificial Intelligence class, from 10:00 to 10:50 you have Advanced Programming class, from 11:00 to 12:50 you have UI/UX Design class, from 1:00 to 2:00 you have a break, and today you have Capstone Project work from 2:00 onwards.",
-    "saturday": "Boss, today you have a more relaxed day. From 9:00 to 11:50 you have team meetings for your Capstone Project, from 12:00 to 12:50 you have Innovation and Entrepreneurship class, from 1:00 to 2:00 you have a break, and today you have extra time to work on personal development and coding practice from 2:00 onwards.",
-    "sunday": "Boss, today is a holiday, but keep an eye on upcoming deadlines and use this time to catch up on any reading or project work."
+    speak("Mam, today's schedule is as follows:")
+
+    week = {
+        "monday": "Mam, from 08:50 AM to 09:40 AM you have Maths - MTB 105, "
+                  "from 10:00 AM to 10:50 AM you have CS Lab, "
+                  "from 10:50 AM to 11:40 AM you have CS - MCA 201, "
+                  "from 11:40 AM to 12:30 PM you have CS - LSCB313, "
+                  "from 12:40 PM to 01:30 PM you have Maths - MCA 201 (KS), "
+                  "from 02:20 PM to 03:10 PM you have Library session, "
+                  "and from 03:10 PM to 04:00 PM you have Computer Networks.",
+
+        "tuesday": "Mam, from 08:50 AM to 09:40 AM you have Computer Networks - MCA 201, "
+                   "from 10:00 AM to 10:50 AM you have Library, "
+                   "from 10:50 AM to 11:40 AM you have Maths - MOC 001 (CL), "
+                   "from 11:40 AM to 12:30 PM you have AI - MCA 202, "
+                   "from 01:30 PM to 04:00 PM you have MATLAB.",
+
+        "wednesday": "Mam, from 08:50 AM to 09:40 AM you have AI - MCA 202, "
+                     "from 10:50 AM to 11:40 AM you have CS - MCA 201, "
+                     "from 11:40 AM to 12:30 PM you have Maths - MCA 201 (CL), "
+                     "from 01:30 PM to 02:20 PM you have Library, "
+                     "and from 03:10 PM to 04:00 PM you have AI",
+
+        "thursday": "Mam, from 08:50 AM to 09:40 AM you have Maths - GJB 104 (KS), "
+                    "from 10:00 AM to 10:50 AM you have CS - MCA 202, "
+                    "from 11:40 AM to 12:30 PM you have Maths - AB 305 (VL), "
+                    "and from 01:30 PM to 03:10 PM you have CS Lab ",
+
+        "friday": "Mam, from 08:00 AM to 09:40 AM you have SEC, "
+                  "from 10:00 AM to 10:50 AM you have AI - MCA 201, "
+                  "from 11:40 AM to 12:30 PM you have Maths - MCA 201 "
+                  "from 12:40 PM to 01:30 PM you have Computer Networks "
+                  "and from 01:30 PM to 04:00 PM you have  Maths Lab.",
+
+        "saturday": "Mam, today you have a more relaxed day with personal projects and self-study.",
+        "sunday": "Mam, today is a holiday. Enjoy your free time and relax!"
     }
+
     if day in week.keys():
         speak(week[day])
 
 
+
 def personal():
     speak(
-        "I am Jarvis, version 1.0, I am an AI assistent, I am developed by Praveen on 29 may 2020 in INDIA"
+        "I am Jarvis, I am an AI assistant, I am developed by Sindhu and Divanshi"
     )
     speak("Now i hope you know me")
 
@@ -363,12 +361,8 @@ if __name__ == "__main__":
         elif ("tell me a joke" in query or "joke" in query):
             jokes()
 
-#weather
-        elif ("weather" in query or "temperature" in query):
-            weather()
-
 #social media
-        elif ("facebook" in query or "whatsapp" in query or "discord" in query or "instagram" in query):
+        elif ("facebook" in query or "whatsapp" in query or "discord" in query or "instagram" in query or "youtube" in query):
             social_media(query)
 
 
